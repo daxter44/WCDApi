@@ -8,7 +8,6 @@ namespace WCDApi.Entity
     public class User
     {
         public Guid Id { get; set; }
-        public string Username { get; set; }
         public string EMail { get; set; }
         public string Role { get; set; }
         public ICollection<MonitoredItem> MonitoredItems { get; set; }
