@@ -82,6 +82,76 @@ namespace WCDApi.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+        [Authorize(Roles = Role.Admin)]
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var users = await _userService.GetAll().ConfigureAwait(false);
+            var model = _mapper.Map<IList<UserModel>>(users);
+            return Ok(model);
+        }
+
+        [Authorize(Roles = Role.Admin)]
+        [HttpPost("getById")]
+        public async Task<IActionResult> GetById([FromBody]UserModel postModel)
+        {
+
+            var user = await _userService.GetById(postModel.Id).ConfigureAwait(false);
+            var model = _mapper.Map<UserModel>(user);
+            return Ok(model);
+        }
+
+        [Authorize(Roles =  Role.Admin)]
+        [HttpPost("generatePassword")]
+        public async Task<IActionResult> GenerateNewPassword([FromBody]UserIdModel id)
+        {
+            try
+            {
+                var user = await _userService.GenerateNewPassword(id.Id).ConfigureAwait(false);
+                return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpPut("update")]
+        public async Task<IActionResult> Update([FromBody]UpdateModel model)
+        {
+            // map model to entity and set id
+            var user = _mapper.Map<User>(model);
+
+            try
+            {
+                // update user 
+                await _userService.Update(user).ConfigureAwait(false);
+                return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [Authorize(Roles = Role.Admin)]
+        [HttpPut("delete")]
+        public async Task<IActionResult> Delete([FromBody]UpdateModel model)
+        {
+            try
+            {
+                await _userService.Delete(model.Id).ConfigureAwait(false);
+                return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
 
     }
 }

@@ -19,6 +19,7 @@ namespace WCDApi.Services
         Task<User> Create(User user);
         Task<Task> Update(User user, string password = null);
         Task<Task> Delete(Guid id);
+        Task<Task> GenerateNewPassword(Guid id);
     }
 
     public class UserService : IUserService
@@ -88,6 +89,25 @@ namespace WCDApi.Services
             if (user == null)
                 throw new AppException("User not found");
 
+            // update password if provided
+            if (!string.IsNullOrWhiteSpace(password))
+            {
+                byte[] passwordHash, passwordSalt;
+                CreatePasswordHash(password, out passwordHash, out passwordSalt);
+
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+            }
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+            return Task.CompletedTask;
+        }
+        public async Task<Task> GenerateNewPassword(Guid id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            var password = GenerateRandomPassword();
             // update password if provided
             if (!string.IsNullOrWhiteSpace(password))
             {
