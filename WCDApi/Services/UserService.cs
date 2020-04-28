@@ -14,7 +14,7 @@ namespace WCDApi.Services
     public interface IUserService
     {
         Task<User> Authenticate(string username, string password);
-        Task<IEnumerable<User>> GetAll();
+        Task<ICollection<User>> GetAll();
         Task<User> GetById(Guid id);
         Task<User> Create(User user);
         Task<Task> Update(User user, string password = null);
@@ -74,7 +74,7 @@ namespace WCDApi.Services
             }
             return Task.CompletedTask;
         }
-        public async Task<IEnumerable<User>> GetAll()
+        public async Task<ICollection<User>> GetAll()
         {
             return await _context.Users.ToListAsync().ConfigureAwait(false);
         }
