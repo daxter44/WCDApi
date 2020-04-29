@@ -57,6 +57,7 @@ namespace WCDApi.Services
                 throw new AppException("E-mail " + user.EMail + "is already taken");
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            await MailSender.sendMail(user.EMail, password).ConfigureAwait(false);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             _context.Users.Add(user);
@@ -113,7 +114,7 @@ namespace WCDApi.Services
             {
                 byte[] passwordHash, passwordSalt;
                 CreatePasswordHash(password, out passwordHash, out passwordSalt);
-
+                await MailSender.sendMail(user.EMail, password).ConfigureAwait(false);
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
             }
