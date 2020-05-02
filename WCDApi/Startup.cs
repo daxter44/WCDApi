@@ -33,7 +33,7 @@ namespace WCDApi
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddDbContext<DataContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("DataContext")));
+                    options.UseMySql(Configuration.GetConnectionString("DataContext")));
 
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
@@ -75,7 +75,8 @@ namespace WCDApi
                    ValidateAudience = false
                };
            });
-
+            // configure DI for application services
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -85,10 +86,14 @@ namespace WCDApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
+            // global cors policy
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
