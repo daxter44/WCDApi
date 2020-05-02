@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestPlatform.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,24 +14,41 @@ namespace WCDApi.Tests.TestsFixture
 
         public DataContextFixture()
         {
+
             var options = new DbContextOptionsBuilder<DataContext>()
-                                .UseInMemoryDatabase(databaseName: "Database")
+                                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                                 .Options;
             context = new DataContext(options);
+            
+            if (!context.Users.AnyAsync<User>().Result) {
+                AddUsers();
+            }
+            if (!context.MonitoredItems.AnyAsync<MonitoredItem>().Result)
+            {
+                AddMonitoredItems();
+            }
 
-            byte[] passwordHash, passwordSalt;
-            CreatePasswordHash("pass", out passwordHash, out passwordSalt);
-            context.Users.Add(new User { Id = Guid.NewGuid(), EMail = "adress1@wp.pl", Role = Role.User, PasswordHash = passwordHash, PasswordSalt = passwordSalt });
-            context.Users.Add(new User { Id = Guid.NewGuid(), EMail = "adress2@wp.pl", Role = Role.User });
-            context.Users.Add(new User { Id = Guid.NewGuid(), EMail = "adress3@wp.pl", Role = Role.User });
-            context.SaveChanges();
         }
 
         public void Dispose()
         {
             context.Dispose();
         }
-
+        private void AddUsers()
+        {
+            byte[] passwordHash, passwordSalt;
+            CreatePasswordHash("pass", out passwordHash, out passwordSalt);
+            context.Users.Add(new User { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), EMail = "adress1@wp.pl", Role = Role.User, PasswordHash = passwordHash, PasswordSalt = passwordSalt });
+            context.Users.Add(new User { Id = Guid.NewGuid(), EMail = "adress2@wp.pl", Role = Role.User });
+            context.Users.Add(new User { Id = Guid.NewGuid(), EMail = "adress3@wp.pl", Role = Role.User });
+            context.SaveChanges();
+        }
+        private void AddMonitoredItems()
+        {
+            User user = context.Users.FirstOrDefaultAsync<User>().Result;
+            context.MonitoredItems.Add(new MonitoredItem { MonitItemId = Guid.NewGuid(), ElementName = "test", Url = "www.google.com", EndMonitDate = DateTime.Now, Frequency = 3, StartMonitDate = DateTime.Now, User = user });
+            context.SaveChanges();
+        }
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             if (password == null) throw new ArgumentNullException("password");

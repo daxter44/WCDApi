@@ -20,10 +20,9 @@ namespace WCDApi.Tests.Services
     public class UserServiceTests : IClassFixture<DataContextFixture>
     {
         public DataContextFixture _fixture;
-        public MapperConfiguration _mapperConfiguration;
-        public UserServiceTests(DataContextFixture fixture)
-        { 
-            _fixture = fixture;
+        public UserServiceTests()
+        {
+            _fixture = new DataContextFixture();
         }
         [Fact]
         public void GetAllUser_ReturnsUserCollections()
