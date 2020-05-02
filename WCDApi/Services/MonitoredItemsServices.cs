@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WCDApi.Data;
@@ -29,7 +30,8 @@ namespace WCDApi.Services
             var user = _context.Users.Find(UserId);
             if (user == null)
                 throw new AppException("User not found");
-
+            if (user.MonitoredItems == null)
+                user.MonitoredItems = new Collection<MonitoredItem>();
             user.MonitoredItems.Add(item);
             _context.Entry(user).State = EntityState.Modified;
             _context.MonitoredItems.Add(item);
