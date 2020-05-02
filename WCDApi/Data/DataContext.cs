@@ -19,7 +19,7 @@ namespace WCDApi.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=EFProviders.InMemory;Trusted_Connection=True;ConnectRetryCount=0");
+                optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=Marcinek44;database=WCD");
             }
         }
 

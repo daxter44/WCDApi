@@ -32,8 +32,7 @@ namespace WCDApi
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            services.AddDbContext<DataContext>(options =>
-                    options.UseMySql(Configuration.GetConnectionString("DataContext")));
+            services.AddTransient<DataContext>();
 
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
@@ -77,6 +76,7 @@ namespace WCDApi
            });
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IMonitoredItemsService, MonitoredItemsServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
