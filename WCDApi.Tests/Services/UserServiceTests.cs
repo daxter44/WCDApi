@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -19,21 +20,17 @@ namespace WCDApi.Tests.Services
     public class UserServiceTests : IClassFixture<DataContextFixture>
     {
         public DataContextFixture _fixture;
+        public MapperConfiguration _mapperConfiguration;
         public UserServiceTests(DataContextFixture fixture)
-        {
+        { 
             _fixture = fixture;
         }
         [Fact]
-        public async Task GetAllUser_ReturnsUserCollections()
+        public void GetAllUser_ReturnsUserCollections()
         {
-            var options = new DbContextOptionsBuilder<DataContext>()
-            .UseInMemoryDatabase(databaseName: "MovieListDatabase")
-            .Options;
-
-           //assert x
-             UserService userService = new UserService(_fixture.context);
-             ICollection<User> user =  userService.GetAll().Result;
-             Assert.Equal(3, user.Count);
+            UserService userService = new UserService(_fixture.context);
+            ICollection<User> user = userService.GetAll().Result;
+            Assert.Equal(3, user.Count);
         }
         [Fact]
         public async Task Create_ValidUser_ReturnsCreatedUser()
@@ -54,17 +51,21 @@ namespace WCDApi.Tests.Services
             await Assert.ThrowsAsync<AppException>(() => userService.Create(user));
         }
         [Fact]
-        public async Task AuthenticateValidUser_ReturnsUser()
+        public void AuthenticateValidUser_ReturnsUser()
         {
             UserService userService = new UserService(_fixture.context);
             Assert.NotNull(userService.Authenticate("adress1@wp.pl", "pass").Result);
         }
         [Fact]
-        public async Task AuthenticateInValidUser_ReturnsUser()
+        public void AuthenticateInValidUser_ReturnsUser()
         {
             UserService userService = new UserService(_fixture.context);
-            User user = userService.Authenticate("adress1@wp.pl", "pass1").Result;
-            Assert.Null(user);
+            if (userService.Authenticate("adress1@wp.pl", "pass1")!= null)
+            {
+                User user = userService.Authenticate("adress1@wp.pl", "pass1").Result;
+                Assert.Null(user);
+            }
+           
         }
 
     }
