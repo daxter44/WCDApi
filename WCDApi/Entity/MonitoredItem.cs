@@ -13,6 +13,8 @@ namespace WCDApi.Entity
         public int Frequency { get; set; }
         public DateTime StartMonitDate { get; set; }
         public DateTime EndMonitDate { get; set; }
+        public int ProcessId { get; set; }
+        public bool isActive { get; set; }
         public virtual User User { get; set; }
     }
 }

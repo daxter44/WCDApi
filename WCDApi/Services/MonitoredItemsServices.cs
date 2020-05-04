@@ -16,6 +16,8 @@ namespace WCDApi.Services
         Task<MonitoredItem> Create(Guid UserId, MonitoredItem item);
         Task<Task> Update(MonitoredItem item);
         Task<Task> Delete(Guid id);
+        Task<Task> StartMonit(Guid id);
+        Task<Task> StopMonit(Guid id);
     }
     public class MonitoredItemsServices : IMonitoredItemsService
     {
@@ -32,6 +34,10 @@ namespace WCDApi.Services
                 throw new AppException("User not found");
             if (user.MonitoredItems == null)
                 user.MonitoredItems = new Collection<MonitoredItem>();
+            
+            item.ProcessId = ProcessManager.StartCommand();
+            if (item.ProcessId == 0)
+                throw new AppException("Cannot run your process");
             user.MonitoredItems.Add(item);
             _context.Entry(user).State = EntityState.Modified;
             _context.MonitoredItems.Add(item);
@@ -44,6 +50,7 @@ namespace WCDApi.Services
             var item = await _context.MonitoredItems.FindAsync(id);
             if (item != null)
             {
+                ProcessManager.StopCommand(item.ProcessId);
                 _context.MonitoredItems.Remove(item);
                 await _context.SaveChangesAsync().ConfigureAwait(false);
             }
@@ -60,16 +67,45 @@ namespace WCDApi.Services
             return await _context.MonitoredItems.FindAsync(id).ConfigureAwait(false);
         }
 
+        public async Task<Task> StartMonit(Guid id)
+        {
+           MonitoredItem item = await _context.MonitoredItems.FindAsync(id).ConfigureAwait(false);
+           if (item == null)
+               throw new AppException("Item not found");
+           item.ProcessId = ProcessManager.StartCommand();
+            if (item.ProcessId == 0)
+                throw new AppException("Cant run process");
+            item.isActive = true;
+            _context.MonitoredItems.Update(item);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+            return Task.CompletedTask;
+        }
+
+        public async Task<Task> StopMonit(Guid id)
+        {
+            MonitoredItem item = await _context.MonitoredItems.FindAsync(id).ConfigureAwait(false);
+            if (item == null)
+                throw new AppException("Item not found");
+            bool stoppedSuccesfull = ProcessManager.StopCommand(item.ProcessId);
+            if (!stoppedSuccesfull)
+                throw new AppException("Cant stop process");
+            item.isActive = false;
+            _context.MonitoredItems.Update(item);
+            await _context.SaveChangesAsync().ConfigureAwait(false);
+            return Task.CompletedTask;
+        }
+
         public async Task<Task> Update(MonitoredItem itemParam)
         {
             var item = await _context.MonitoredItems.FindAsync(itemParam.MonitItemId);
 
             if (item == null)
-                throw new AppException("User not found");
+                throw new AppException("Item not found");
 
             _context.MonitoredItems.Update(item);
             await _context.SaveChangesAsync().ConfigureAwait(false);
             return Task.CompletedTask;
         }
+
     }
 }
