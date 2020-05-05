@@ -5,14 +5,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using WCDApi.Data;
 using WCDApi.Helpers;
 using WCDApi.Services;
+using WCDApi.DataBase.Data;
 
 namespace WCDApi
 {

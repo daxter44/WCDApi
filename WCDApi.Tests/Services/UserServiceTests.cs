@@ -1,14 +1,7 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using WCDApi.Data;
-using WCDApi.Entity;
+using WCDApi.DataBase.Entity;
 using WCDApi.Helpers;
 using WCDApi.Services;
 using WCDApi.Tests.TestsFixture;

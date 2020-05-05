@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WCDApi.Data;
-using WCDApi.Entity;
+using WCDApi.DataBase.Data;
+using WCDApi.DataBase.Entity;
 using WCDApi.Helpers;
 
 namespace WCDApi.Services

@@ -22,6 +22,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WCDApi\WCDApi.csproj" />
+    <ProjectReference Include="..\WCDApi.Database\WCDApi.DataBase.csproj" />
+    <ProjectReference Include="..\WCDApi.Database.Entity\WCDApi.DataBase.Entity.csproj" />
   </ItemGroup>
 
 </Project>

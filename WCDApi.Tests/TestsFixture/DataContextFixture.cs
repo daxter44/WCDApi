@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestPlatform.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using WCDApi.Data;
-using WCDApi.Entity;
+using WCDApi.DataBase.Data;
+using WCDApi.DataBase.Entity;
 
 namespace WCDApi.Tests.TestsFixture
 {

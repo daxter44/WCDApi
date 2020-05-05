@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using WCDApi.Controllers;
-using WCDApi.Entity;
+using WCDApi.DataBase.Entity;
 using WCDApi.Helpers;
-using WCDApi.Model.MonitoredItems;
 using WCDApi.Services;
 using Xunit;
 

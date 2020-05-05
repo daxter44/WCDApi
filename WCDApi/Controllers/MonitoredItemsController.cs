@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WCDApi.Entity;
+using WCDApi.DataBase.Entity;
 using WCDApi.Helpers;
 using WCDApi.Model.MonitoredItems;
 using WCDApi.Services;

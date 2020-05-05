@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace WCDApi.Entity
+namespace WCDApi.DataBase.Entity
 {
     public class MonitoredItem
     {

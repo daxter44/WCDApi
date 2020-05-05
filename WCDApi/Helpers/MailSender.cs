@@ -18,7 +18,7 @@ namespace WCDApi.Helpers
 
                 // Send the message 
                 var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("WebChangeDetector@interia.pl"));
+                message.From.Add(new MailboxAddress("fireapp@interia.pl"));
                 message.To.Add(new MailboxAddress(address));
                 message.Subject = "Welcome! Your Website has changed";
 
@@ -39,7 +39,7 @@ namespace WCDApi.Helpers
                     await client.ConnectAsync("poczta.interia.pl", 465, true);
 
                     // Note: only needed if the SMTP server requires authentication
-                    await client.AuthenticateAsync("WebChangeDetector@interia.pl", "pass");
+                    await client.AuthenticateAsync("fireapp@interia.pl", "Ogien2020");
 
                     await client.SendAsync(message);
                     client.Disconnect(true);

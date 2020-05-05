@@ -7,6 +7,7 @@ namespace WCDApi.Helpers
     { 
         public static int StartCommand()
         {
+
             var process = new Process()
             {
                 StartInfo = new ProcessStartInfo

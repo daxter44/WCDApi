@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using AutoMapper;
 using Moq;
 using WCDApi.Controllers;
-using WCDApi.Entity;
 using WCDApi.Services;
 using WCDApi.Helpers;
-using WCDApi.Tests.TestsFixture;
 using Xunit;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WCDApi.DataBase.Entity;
 
 namespace WCDApi.Tests.Controllers
 {

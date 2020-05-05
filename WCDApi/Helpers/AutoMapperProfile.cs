@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WCDApi.Entity;
-using AutoMapper;
+﻿using AutoMapper;
 using WCDApi.Model.Users;
 using WCDApi.Model.MonitoredItems;
+using WCDApi.DataBase.Entity;
 
 namespace WCDApi.Helpers
 {

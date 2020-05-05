@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using WCDApi.Data;
-using WCDApi.Entity;
+using WCDApi.DataBase.Data;
+using WCDApi.DataBase.Entity;
 using WCDApi.Helpers;
 
 namespace WCDApi.Services

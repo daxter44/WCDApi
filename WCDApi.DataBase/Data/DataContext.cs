@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WCDApi.Entity;
+using WCDApi.DataBase.Entity;
 
-namespace WCDApi.Data
+namespace WCDApi.DataBase.Data
 {
     public class DataContext : DbContext
     {
-        public DataContext() 
+        public DataContext()
         {
         }
         public DataContext(DbContextOptions<DataContext> options) : base(options)
