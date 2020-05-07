@@ -25,10 +25,12 @@ namespace WCDApi.DataBase.Data
 
         public DbSet<MonitoredItem> MonitoredItems { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<MonitoredHistoryItem> MonitoredHistory { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<MonitoredHistoryItem>().ToTable("MonitoredHistory");
             modelBuilder.Entity<MonitoredItem>().ToTable("MonitoredItem");
             modelBuilder.Entity<User>().ToTable("Users");
         }
