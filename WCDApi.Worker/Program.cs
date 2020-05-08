@@ -21,7 +21,6 @@ namespace WCDApi.Worker
             Configuration = new ConfigurationBuilder()
                      .AddJsonFile(sharedSettings)
                      .Build();
-
             ConvertArgsOnMonitoredItem(args);
             CreateHostBuilder(args).Build().Run();
         }
@@ -45,6 +44,7 @@ namespace WCDApi.Worker
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddDbContext<DataContext>(options => options.UseMySql(Configuration.GetConnectionString("DataContext")));
+                    services.Configure<MailSettings>(options => Configuration.GetSection("MailStrings").Bind(options)); 
                     services.AddSingleton(_item);
                     services.AddHostedService<Worker>();
                 });

@@ -9,6 +9,7 @@ using System.Timers;
 using WCDApi.Worker.HTML;
 using Microsoft.Extensions.DependencyInjection;
 using WCDApi.DataBase.Data;
+using Microsoft.Extensions.Options;
 
 namespace WCDApi.Worker
 {
@@ -17,17 +18,19 @@ namespace WCDApi.Worker
         private readonly ILogger<Worker> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private MonitoredItem _item;
+        private MailSettings _mailSettings;
         HtmlDocument _oldWebPage;
         HtmlDocument _newWebPage;
         HtmlNode _oldNode;
         HtmlNode _newNode;
         Timer _timer;
-        
-        public Worker(ILogger<Worker> logger, MonitoredItem item, IServiceScopeFactory serviceScopeFactory)
+
+        public Worker(ILogger<Worker> logger, MonitoredItem item, IServiceScopeFactory serviceScopeFactory, IOptions<MailSettings> mailSettings)
         {
             _logger = logger;
             _item = item;
             _serviceScopeFactory = serviceScopeFactory;
+            _mailSettings = mailSettings.Value;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
