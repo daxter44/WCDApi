@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WCDApi.DataBase.Data;
@@ -10,11 +12,21 @@ namespace WCDApi.Worker
     public class Program
     {
         static MonitoredItem _item;
+
+        public static IConfiguration Configuration { get; set; }
         public static void Main(string[] args)
         {
+
+            var sharedSettings = Path.Combine(Environment.CurrentDirectory, "..", "SharedSetting.json"); 
+            Configuration = new ConfigurationBuilder()
+                     .AddJsonFile(sharedSettings)
+                     .Build();
+
             ConvertArgsOnMonitoredItem(args);
             CreateHostBuilder(args).Build().Run();
         }
+
+
 
         private static void ConvertArgsOnMonitoredItem(string[] args)
         {
@@ -32,7 +44,7 @@ namespace WCDApi.Worker
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddTransient<DataContext>();
+                    services.AddDbContext<DataContext>(options => options.UseMySql(Configuration.GetConnectionString("DataContext")));
                     services.AddSingleton(_item);
                     services.AddHostedService<Worker>();
                 });
