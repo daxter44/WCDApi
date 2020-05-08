@@ -15,6 +15,9 @@ namespace WCDApi.Helpers
             //monitoredItem
             CreateMap<CreateItemModel, MonitoredItem>();
             CreateMap<MonitoredItem, MonitoredItemModel>();
+            CreateMap<MonitoredItemModel, MonitoredItem>();
+            CreateMap<MonitoredHistoryItemModel, MonitoredHistoryItem>();
+            CreateMap<MonitoredHistoryItem, MonitoredHistoryItemModel>();
         }
     }
 }

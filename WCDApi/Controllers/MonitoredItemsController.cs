@@ -55,7 +55,7 @@ namespace WCDApi.Controllers
             }
             }
         [Authorize]
-        [HttpPut("StartMonit")]
+        [HttpPost("StartMonit")]
         public async Task<IActionResult> StartMonit([FromBody]MonitoredItemModel model)
         {
             // map model to entity and set id
@@ -74,7 +74,7 @@ namespace WCDApi.Controllers
             }
         }
         [Authorize]
-        [HttpPut("StopMonit")]
+        [HttpPost("StopMonit")]
         public async Task<IActionResult> StopMonit([FromBody]MonitoredItemModel model)
         {
             // map model to entity and set id
@@ -85,6 +85,26 @@ namespace WCDApi.Controllers
                 // update user 
                 await _itemsService.StopMonit(item.MonitItemId).ConfigureAwait(false);
                 return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+        [Authorize]
+        [HttpPost("GetHistory")]
+        public async Task<IActionResult> GetHistory([FromBody]MonitoredItemModel model)
+        {
+            // map model to entity and set id
+            var item = _mapper.Map<MonitoredItem>(model);
+
+            try
+            {
+                // update user 
+                var items = await _itemsService.GetHistory(item.MonitItemId).ConfigureAwait(false);
+                var returnModel = _mapper.Map<IList<MonitoredHistoryItemModel>>(items);
+                return Ok(returnModel);
             }
             catch (AppException ex)
             {

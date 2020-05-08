@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WCDApi.DataBase.Data;
@@ -13,6 +14,7 @@ namespace WCDApi.Services
     {
         Task<ICollection<MonitoredItem>> GetAll();
         Task<MonitoredItem> GetById(Guid id);
+        Task<ICollection<MonitoredHistoryItem>> GetHistory(Guid id);
         Task<MonitoredItem> Create(Guid UserId, MonitoredItem item);
         Task<Task> Update(MonitoredItem item);
         Task<Task> Delete(Guid id);
@@ -34,10 +36,6 @@ namespace WCDApi.Services
                 throw new AppException("User not found");
             if (user.MonitoredItems == null)
                 user.MonitoredItems = new Collection<MonitoredItem>();
-            
-            item.ProcessId = ProcessManager.StartCommand();
-            if (item.ProcessId == 0)
-                throw new AppException("Cannot run your process");
             user.MonitoredItems.Add(item);
             _context.Entry(user).State = EntityState.Modified;
             _context.MonitoredItems.Add(item);
@@ -67,12 +65,17 @@ namespace WCDApi.Services
             return await _context.MonitoredItems.FindAsync(id).ConfigureAwait(false);
         }
 
+        public async Task<ICollection<MonitoredHistoryItem>> GetHistory(Guid id)
+        {
+            return await _context.MonitoredHistory.Where(a => a.MonitoredItemId == id).ToListAsync();
+        }
+
         public async Task<Task> StartMonit(Guid id)
         {
            MonitoredItem item = await _context.MonitoredItems.FindAsync(id).ConfigureAwait(false);
            if (item == null)
                throw new AppException("Item not found");
-           item.ProcessId = ProcessManager.StartCommand();
+           item.ProcessId = ProcessManager.StartCommand(item);
             if (item.ProcessId == 0)
                 throw new AppException("Cant run process");
             item.isActive = true;

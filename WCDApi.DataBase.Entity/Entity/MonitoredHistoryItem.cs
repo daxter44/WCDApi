@@ -1,18 +1,28 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using HtmlAgilityPack;
 
 namespace WCDApi.DataBase.Entity
 {
     public class MonitoredHistoryItem
-    { 
-        Guid MonitoredItemId { get; set; }
-        int Type { get; set; }
-        string Message { get; set; }
-        DateTime Date { get; set; }
-        HtmlDocument OldWebPage;
-        HtmlDocument NewWebPage;
-        HtmlNode OldNode;
-        HtmlNode NewNode;
+    {
+        [Key]
+        public Guid MonitoredHistoryItemId { get; set; }
+        public Guid MonitoredItemId { get; set; }
+        public int Type { get; set; }
+        public string Message { get; set; }
+        public DateTime Date { get; set; }
+        public HtmlDocument OldWebPage;
+        public HtmlDocument NewWebPage;
+        public HtmlNode OldNode;
+        public HtmlNode NewNode;
+        public virtual MonitoredItem MonitoredItem { get; set; }
+
+        public MonitoredHistoryItem()
+        {
+
+        }
+
         public MonitoredHistoryItem(Guid monitoredItemId)
         {
             MonitoredItemId = monitoredItemId;
