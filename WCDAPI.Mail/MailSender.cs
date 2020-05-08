@@ -1,15 +1,11 @@
-﻿using AutoMapper.Configuration;
+﻿
 using MailKit.Net.Smtp;
-using Microsoft.Extensions.Options;
 using MimeKit;
-using MimeKit.Text;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
+using WCDApi.DataBase.Entity;
 
-namespace WCDApi.Helpers
+namespace WCDApi.Mail
 {
     public class MailSender
     {

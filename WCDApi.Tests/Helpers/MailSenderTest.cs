@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using WCDApi.DataBase.Entity;
 using WCDApi.Helpers;
+using WCDApi.Mail;
 using Xunit;
 
 namespace WCDApi.Tests.Helpers

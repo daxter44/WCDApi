@@ -60,7 +60,7 @@ namespace WCDApi.Worker.HTML
             {
                 // DetectorArgs myArgs = new DetectorArgs("I can't check page. No internet");
                 // HistoryChange(this, myArgs);
-                return "";
+                return ex.Message;
             }
 
         }

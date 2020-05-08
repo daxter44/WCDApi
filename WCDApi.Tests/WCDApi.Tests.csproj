@@ -21,9 +21,10 @@
     <PackageReference Include="coverlet.collector" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WCDApi\WCDApi.csproj" />
     <ProjectReference Include="..\WCDApi.Database\WCDApi.DataBase.csproj" />
     <ProjectReference Include="..\WCDApi.Database.Entity\WCDApi.DataBase.Entity.csproj" />
+    <ProjectReference Include="..\WCDApi.Mail\WCDApi.Mail.csproj" />
+    <ProjectReference Include="..\WCDApi\WCDApi.csproj" />
   </ItemGroup>
 
 </Project>

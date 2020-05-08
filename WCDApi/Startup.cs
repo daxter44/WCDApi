@@ -14,6 +14,7 @@ using WCDApi.Services;
 using WCDApi.DataBase.Data;
 using System.IO;
 using Microsoft.EntityFrameworkCore;
+using WCDApi.DataBase.Entity;
 
 namespace WCDApi
 {

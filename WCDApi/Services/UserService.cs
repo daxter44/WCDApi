@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using WCDApi.DataBase.Data;
 using WCDApi.DataBase.Entity;
 using WCDApi.Helpers;
+using WCDApi.Mail;
 
 namespace WCDApi.Services
 {

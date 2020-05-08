@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCDApi.DataBase", "WCDApi.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCDApi.DataBase.Entity", "WCDApi.Database.Entity\WCDApi.DataBase.Entity.csproj", "{FD1A460C-802C-40E3-A196-AF5ABE4B8FBF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCDApi.Mail", "WCDApi.Mail\WCDApi.Mail.csproj", "{A9875DD4-F6A1-4C8A-96DD-B48AA960EF41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{FD1A460C-802C-40E3-A196-AF5ABE4B8FBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD1A460C-802C-40E3-A196-AF5ABE4B8FBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD1A460C-802C-40E3-A196-AF5ABE4B8FBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9875DD4-F6A1-4C8A-96DD-B48AA960EF41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9875DD4-F6A1-4C8A-96DD-B48AA960EF41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9875DD4-F6A1-4C8A-96DD-B48AA960EF41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9875DD4-F6A1-4C8A-96DD-B48AA960EF41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

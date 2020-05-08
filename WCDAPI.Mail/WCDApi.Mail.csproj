@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WCDApi.Database.Entity\WCDApi.DataBase.Entity.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MimeKit" Version="2.6.0" />
+    <PackageReference Include="MailKit" Version="2.6.0" />
+  </ItemGroup>
+</Project>
