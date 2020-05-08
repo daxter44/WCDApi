@@ -12,6 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using WCDApi.Helpers;
 using WCDApi.Services;
 using WCDApi.DataBase.Data;
+using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace WCDApi
 {
@@ -19,8 +21,13 @@ namespace WCDApi
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            var sharedSettings = Path.Combine(Environment.CurrentDirectory, "..", "SharedSetting.json");
+            Configuration = new ConfigurationBuilder()
+                     .AddJsonFile("appsettings.json")
+                     .AddJsonFile(sharedSettings)
+                     .Build();
         }
+       
 
         public IConfiguration Configuration { get; }
 
@@ -31,14 +38,15 @@ namespace WCDApi
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            services.AddTransient<DataContext>();
+            services.AddDbContext<DataContext>(options => options.UseMySql(Configuration.GetConnectionString("DataContext")));
 
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
-            // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
+            services.Configure<MailSettings>(options => Configuration.GetSection("MailStrings").Bind(options));
+        // configure jwt authentication
+        var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 
             services.AddAuthentication(x =>

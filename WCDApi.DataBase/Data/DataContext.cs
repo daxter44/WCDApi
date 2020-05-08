@@ -17,10 +17,7 @@ namespace WCDApi.DataBase.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=Marcinek44;database=WCD");
-            }
+            
         }
 
         public DbSet<MonitoredItem> MonitoredItems { get; set; }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +27,12 @@ namespace WCDApi.Services
     public class UserService : IUserService
     {
         private DataContext _context;
-
-        public UserService(DataContext context)
-        {
-            _context = context;
-        }
+        private  MailSettings _mailSettings;
+        public UserService(DataContext context, IOptions<MailSettings> mailSettings)
+            {
+                _context = context;
+                _mailSettings = mailSettings.Value;
+            }
         public async Task<User> Authenticate(string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
@@ -57,7 +60,8 @@ namespace WCDApi.Services
                 throw new AppException("E-mail " + user.EMail + "is already taken");
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
-            await MailSender.sendMail(user.EMail, password).ConfigureAwait(false);
+            MailSender mail = new MailSender(_mailSettings);
+            await mail.sendMail(user.EMail, password).ConfigureAwait(false);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             _context.Users.Add(user);
@@ -114,7 +118,8 @@ namespace WCDApi.Services
             {
                 byte[] passwordHash, passwordSalt;
                 CreatePasswordHash(password, out passwordHash, out passwordSalt);
-                await MailSender.sendMail(user.EMail, password).ConfigureAwait(false);
+                MailSender mail = new MailSender(_mailSettings);
+                await mail.sendMail(user.EMail, password).ConfigureAwait(false);
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
             }
