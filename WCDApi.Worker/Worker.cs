@@ -7,8 +7,6 @@ using WCDApi.DataBase.Entity;
 using HtmlAgilityPack;
 using System.Timers;
 using WCDApi.Worker.HTML;
-using WCDApi.DataBase.Entity;
-using System;
 using Microsoft.Extensions.DependencyInjection;
 using WCDApi.DataBase.Data;
 
@@ -50,6 +48,7 @@ namespace WCDApi.Worker
 
                     MonitoredHistoryItem historyitem = new MonitoredHistoryItem(_item.MonitItemId);
                     historyitem.SetTypeError("Cant find element on website ");
+                    SaveToDatabase(historyitem);
                     // HistoryChange(this, myArg);
                     return false;
                 }
@@ -64,12 +63,12 @@ namespace WCDApi.Worker
             _timer.Start();
         }
 
-        private void timer_Elapsed(object sender, ElapsedEventArgs e)
+        private  void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             _newWebPage = new HtmlDocument();
             _newWebPage.LoadHtml(HTMLMenager.GetHtmlPage(_item.Url));
             MonitoredHistoryItem historyItem = CompareWebPages();
-            SaveToDatabase(historyItem);
+             SaveToDatabase(historyItem);
             
         }
         private MonitoredHistoryItem CompareWebPages()
@@ -104,10 +103,12 @@ namespace WCDApi.Worker
                 return historyItem;
             }
         }
-        private void SaveToDatabase(MonitoredHistoryItem item)
+        private async void SaveToDatabase(MonitoredHistoryItem item)
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+            await  dbContext.MonitoredHistory.AddAsync(item);
+            await dbContext.SaveChangesAsync();
         }
 
         
