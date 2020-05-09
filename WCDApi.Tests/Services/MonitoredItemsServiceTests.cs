@@ -22,7 +22,7 @@ namespace WCDApi.Tests.Services
         public void GetAllItems_ReturnsUserCollections()
         {
             MonitoredItemsServices ItemsService = new MonitoredItemsServices(_fixture.context);
-            ICollection<MonitoredItem> items = ItemsService.GetAll().Result;
+            ICollection<MonitoredItem> items = ItemsService.GetAll(Guid.Parse("00000000-0000-0000-0000-000000000001")).Result;
             Assert.Equal(2, items.Count);
         }
         [Fact]

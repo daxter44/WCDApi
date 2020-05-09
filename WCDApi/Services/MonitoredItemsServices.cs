@@ -12,7 +12,7 @@ namespace WCDApi.Services
 {
     public interface IMonitoredItemsService
     {
-        Task<ICollection<MonitoredItem>> GetAll();
+        Task<ICollection<MonitoredItem>> GetAll(Guid id);
         Task<MonitoredItem> GetById(Guid id);
         Task<ICollection<MonitoredHistoryItem>> GetHistory(Guid id);
         Task<MonitoredItem> Create(Guid UserId, MonitoredItem item);
@@ -48,16 +48,17 @@ namespace WCDApi.Services
             var item = await _context.MonitoredItems.FindAsync(id);
             if (item != null)
             {
-                ProcessManager.StopCommand(item.ProcessId);
+                ProcessManager.StopCommand(item.ProcessId); 
                 _context.MonitoredItems.Remove(item);
                 await _context.SaveChangesAsync().ConfigureAwait(false);
             }
             return Task.CompletedTask;
         }
 
-        public async Task<ICollection<MonitoredItem>> GetAll()
+        public async Task<ICollection<MonitoredItem>> GetAll(Guid id)
         {
-            return await _context.MonitoredItems.ToListAsync().ConfigureAwait(false);
+             var user = await _context.Users.Include(a => a.MonitoredItems).FirstOrDefaultAsync(a => a.Id == id).ConfigureAwait(false);
+            return user.MonitoredItems;
         }
 
         public async Task<MonitoredItem> GetById(Guid id)

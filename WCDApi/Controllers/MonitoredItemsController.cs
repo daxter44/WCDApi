@@ -28,9 +28,25 @@ namespace WCDApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var items = await _itemsService.GetAll().ConfigureAwait(false);
-            var model = _mapper.Map<IList<MonitoredItemModel>>(items);
-            return Ok(model);
+            var currentUserId = Guid.Parse(User.Identity.Name);
+            if (currentUserId == null)
+                return Forbid();
+
+            try
+            {
+
+                var items = await _itemsService.GetAll(currentUserId).ConfigureAwait(false);
+                var model = _mapper.Map<IList<MonitoredItemModel>>(items);
+                return Ok(model);
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+
+
+
         }
         [Authorize]
         [HttpPost("create")]
