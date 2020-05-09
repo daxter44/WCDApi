@@ -57,6 +57,48 @@ namespace WCDApi.Mail
 
 
         }
+        public async Task<Boolean> sendAllert(String address, String url)
+        {
+            try
+            {
+                // Send the message 
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress(_mailSettings.Mail));
+                message.To.Add(new MailboxAddress(address));
+                message.Subject = "Welcome! Your Website has changed";
+
+                message.Body = new TextPart("plain")
+                {
+                    Text = @"Hey
+
+                    Your website has changed ! Check this out: " + url + @"
+
+                    -- WCDapp"
+                };
+
+                using (var client = new SmtpClient())
+                {
+                    // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
+                    client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+
+                    await client.ConnectAsync(_mailSettings.SMTPServer, _mailSettings.Port, true);
+
+                    // Note: only needed if the SMTP server requires authentication
+                    await client.AuthenticateAsync(_mailSettings.Mail, _mailSettings.Pass);
+
+                    await client.SendAsync(message);
+                    client.Disconnect(true);
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Could not send e-mail. Exception caught: " + e);
+                return false;
+            }
+
+
+        }
     }
 }
 

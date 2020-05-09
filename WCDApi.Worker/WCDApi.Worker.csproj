@@ -18,8 +18,6 @@
   <ItemGroup>
     <ProjectReference Include="..\WCDApi.Database.Entity\WCDApi.DataBase.Entity.csproj" />
     <ProjectReference Include="..\WCDApi.Database\WCDApi.DataBase.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Shared\SharedSetting.json" />
+    <ProjectReference Include="..\WCDApi.Mail\WCDApi.Mail.csproj" />
   </ItemGroup>
 </Project>

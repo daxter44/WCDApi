@@ -10,6 +10,8 @@ using WCDApi.Worker.HTML;
 using Microsoft.Extensions.DependencyInjection;
 using WCDApi.DataBase.Data;
 using Microsoft.Extensions.Options;
+using WCDApi.Mail;
+using Microsoft.EntityFrameworkCore;
 
 namespace WCDApi.Worker
 {
@@ -24,13 +26,16 @@ namespace WCDApi.Worker
         HtmlNode _oldNode;
         HtmlNode _newNode;
         Timer _timer;
-
+        DataContext _context;
         public Worker(ILogger<Worker> logger, MonitoredItem item, IServiceScopeFactory serviceScopeFactory, IOptions<MailSettings> mailSettings)
         {
             _logger = logger;
             _item = item;
             _serviceScopeFactory = serviceScopeFactory;
             _mailSettings = mailSettings.Value;
+
+            var scope = _serviceScopeFactory.CreateScope();
+             _context = scope.ServiceProvider.GetRequiredService<DataContext>();
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -66,13 +71,19 @@ namespace WCDApi.Worker
             _timer.Start();
         }
 
-        private  void timer_Elapsed(object sender, ElapsedEventArgs e)
+        private async void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            _timer.Stop();
             _newWebPage = new HtmlDocument();
             _newWebPage.LoadHtml(HTMLMenager.GetHtmlPage(_item.Url));
             MonitoredHistoryItem historyItem = CompareWebPages();
-             SaveToDatabase(historyItem);
-            
+            await SaveToDatabase(historyItem);
+            if(historyItem.Type == 2)
+            {
+                await SendAlert(historyItem);
+            }
+            _timer.Start();
+
         }
         private MonitoredHistoryItem CompareWebPages()
         {
@@ -106,14 +117,18 @@ namespace WCDApi.Worker
                 return historyItem;
             }
         }
-        private async void SaveToDatabase(MonitoredHistoryItem item)
+        private async Task SaveToDatabase(MonitoredHistoryItem item)
         {
-            using var scope = _serviceScopeFactory.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-            await  dbContext.MonitoredHistory.AddAsync(item);
-            await dbContext.SaveChangesAsync();
+            await _context.MonitoredHistory.AddAsync(item);
+            await _context.SaveChangesAsync();
         }
-
+        private async Task SendAlert(MonitoredHistoryItem item)
+        {
+            MonitoredItem monitoredItem = await _context.MonitoredItems.Include(a => a.User).FirstOrDefaultAsync(a => a.MonitItemId == item.MonitoredItemId);
+            User user = await _context.Users.FindAsync(monitoredItem.User.Id);
+            MailSender sender = new MailSender(_mailSettings);
+            await sender.sendAllert(user.EMail, monitoredItem.Url);
+        }
         
 
     }
