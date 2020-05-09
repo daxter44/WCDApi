@@ -22,7 +22,7 @@ namespace WCDApi
     {
         public Startup(IConfiguration configuration)
         {
-            var sharedSettings = Path.Combine(Environment.CurrentDirectory, "..", "SharedSetting.json");
+            var sharedSettings = Path.Combine(Environment.CurrentDirectory, "..","SharedSettings.json");
             Configuration = new ConfigurationBuilder()
                      .AddJsonFile("appsettings.json")
                      .AddJsonFile(sharedSettings)

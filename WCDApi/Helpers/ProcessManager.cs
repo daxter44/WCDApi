@@ -15,7 +15,7 @@ namespace WCDApi.Helpers
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = "./Worker/WCDApi.Worker",
+                    FileName = "./WCDApi.Worker",
                     Arguments = args,// or whatever shell you use
                     UseShellExecute = false,
                     CreateNoWindow = true   

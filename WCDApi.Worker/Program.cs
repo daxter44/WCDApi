@@ -17,7 +17,7 @@ namespace WCDApi.Worker
         public static void Main(string[] args)
         {
 
-            var sharedSettings = Path.Combine(Environment.CurrentDirectory, "..", "SharedSetting.json"); 
+            var sharedSettings = Path.Combine(Environment.CurrentDirectory,"..", "SharedSettings.json"); 
             Configuration = new ConfigurationBuilder()
                      .AddJsonFile(sharedSettings)
                      .Build();
